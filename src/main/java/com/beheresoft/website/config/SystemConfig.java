@@ -16,6 +16,6 @@ public class SystemConfig {
 
     private String markdownDir;
     private String indexDir;
-    private String metaFile;
+    private String metaFile = "metaInfo.json";
 
 }

@@ -7,5 +7,5 @@ spring:
     mode: HTML
     suffix: .html
 website:
-  markdownDir: d:/website/markdown
+  markdownDir: E:/git/KoDiRemoteControl
   indexDir: d:/website/index
