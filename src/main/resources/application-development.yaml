@@ -1,0 +1,11 @@
+spring:
+  thymeleaf:
+    cache: false
+    check-template-location: true
+    enabled: true
+    encoding: UTF-8
+    mode: HTML
+    suffix: .html
+website:
+  markdownDir: d:/website/markdown
+  indexDir: d:/website/index
