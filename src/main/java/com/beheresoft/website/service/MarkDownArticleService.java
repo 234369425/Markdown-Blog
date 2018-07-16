@@ -19,6 +19,10 @@ public class MarkDownArticleService {
         this.parser = parser;
     }
 
+    public String get(){
+        return parse("");
+    }
+
     private String parse(String markdown) {
         Document document = parser.parse(markdown);
         return renderer.render(document);
