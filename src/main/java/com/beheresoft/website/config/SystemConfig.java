@@ -17,5 +17,12 @@ public class SystemConfig {
     private String markdownDir;
     private String indexDir;
     private String metaFile = "metaInfo.json";
+    private TITLE articleTitle;
+    private int summaryRows = 4;
+
+    public enum TITLE {
+        FILE_NAME,
+        FIRST_ROW
+    }
 
 }

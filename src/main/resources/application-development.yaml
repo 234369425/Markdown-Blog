@@ -7,5 +7,6 @@ spring:
     mode: HTML
     suffix: .html
 website:
-  markdownDir: E:/git/KoDiRemoteControl
+  markdownDir: E:/demo/guava
   indexDir: d:/website/index
+  articleTitle: FILE_NAME
