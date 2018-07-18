@@ -78,7 +78,10 @@ public class MarkDownUtils {
         }
         Catalog catalog = new Catalog("root");
         metaInfo.setCatalog(catalog);
-        loadCatalogInfo(systemConfig, catalog, path);
+        List<Path> list = MoreFiles.listFiles(path);
+        for (Path p : list) {
+            loadCatalogInfo(systemConfig, catalog, p);
+        }
         metaInfo.setHashCode(hashCode);
         try {
             Files.write(new Gson().toJson(metaInfo).getBytes(), file);
@@ -92,6 +95,7 @@ public class MarkDownUtils {
         File file = path.toFile();
         if (file.isDirectory()) {
             Catalog ct = new Catalog(path.getFileName().toString());
+            ct.setHashcode(path.hashCode());
             catalog.addCatalog(ct);
             List<Path> lists = MoreFiles.listFiles(path);
             for (Path p : lists) {

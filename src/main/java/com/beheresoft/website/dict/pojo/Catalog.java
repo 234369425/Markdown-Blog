@@ -14,6 +14,7 @@ public class Catalog {
 
     @Getter
     private String name;
+    private int hashcode;
     private List<Catalog> subCatalogs = Lists.newArrayList();
     private List<MetaData> articles = Lists.newArrayList();
 
@@ -27,6 +28,14 @@ public class Catalog {
 
     public void addMetaData(MetaData metaData) {
         this.articles.add(metaData);
+    }
+
+    public List<String> catalogs() {
+        List<String> list = Lists.newLinkedList();
+        for (Catalog catalog : subCatalogs) {
+            list.add(catalog.getName());
+        }
+        return list;
     }
 
     public int getArticleCount() {
