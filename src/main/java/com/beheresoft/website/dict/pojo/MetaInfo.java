@@ -1,11 +1,8 @@
-package com.beheresoft.website.pojo;
+package com.beheresoft.website.dict.pojo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Aladi
@@ -17,10 +14,6 @@ public class MetaInfo {
 
     private int hashCode;
     private Boolean locked = Boolean.FALSE;
-    private List<MetaData> metas = new ArrayList<>();
-
-    public void addMetaData(MetaData metaData) {
-        metas.add(metaData);
-    }
+    private Catalog catalog = null;
 
 }

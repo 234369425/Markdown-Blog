@@ -1,4 +1,4 @@
-package com.beheresoft.website.pojo;
+package com.beheresoft.website.dict.pojo;
 
 import lombok.Getter;
 import lombok.Setter;

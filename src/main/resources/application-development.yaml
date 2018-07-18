@@ -7,6 +7,6 @@ spring:
     mode: HTML
     suffix: .html
 website:
-  markdownDir: E:/demo/guava
+  markdownDir: E:/demo/articles
   indexDir: d:/website/index
   articleTitle: FILE_NAME

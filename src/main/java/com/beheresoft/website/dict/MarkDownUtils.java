@@ -1,10 +1,10 @@
 package com.beheresoft.website.dict;
 
 import com.beheresoft.website.config.SystemConfig;
-import com.beheresoft.website.pojo.MetaData;
-import com.beheresoft.website.pojo.MetaInfo;
+import com.beheresoft.website.dict.pojo.Catalog;
+import com.beheresoft.website.dict.pojo.MetaData;
+import com.beheresoft.website.dict.pojo.MetaInfo;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
@@ -16,8 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -32,6 +31,13 @@ public class MarkDownUtils {
 
     }
 
+    /**
+     * 枚举所有markdown file
+     *
+     * @param path
+     * @param result
+     * @throws IOException
+     */
     public static void listMarkDownFiles(final Path path, final List<Path> result) throws IOException {
         List<Path> paths = MoreFiles.listFiles(path);
         for (Path p : paths) {
@@ -44,60 +50,88 @@ public class MarkDownUtils {
         }
     }
 
-    public static MetaInfo generateMetaInfo(final Path path, final SystemConfig systemConfig, final List<Path> markDowns) {
+    public static MetaInfo loadCatalogInfo(final SystemConfig systemConfig) throws IOException {
+        final Path path = Paths.get(systemConfig.getMarkdownDir());
+        final List<Path> markDowns = Lists.newArrayList();
+        listMarkDownFiles(path, markDowns);
         MetaInfo metaInfo = null;
         File file = new File(path.toAbsolutePath().toString() + "/" + systemConfig.getMetaFile());
         if (file.exists()) {
-            List<String> contents = Lists.newArrayList();
-            try {
-                contents = Files.readLines(file, Charset.forName("UTF-8"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            List<String> contents = Files.readLines(file, Charset.forName("UTF-8"));
             try {
                 metaInfo = new Gson().fromJson(Joiner.on("").join(contents), MetaInfo.class);
             } catch (Exception e) {
 
             }
         } else {
+            Files.touch(file);
+        }
+
+        if (metaInfo == null) {
             metaInfo = new MetaInfo();
-            generateMetaInfo(markDowns, metaInfo, systemConfig);
         }
 
         int hashCode = calcHashCode(markDowns);
+        //如果目录内的markdown文件没有变化
         if (metaInfo.getHashCode() == hashCode) {
             return metaInfo;
         }
-
+        Catalog catalog = new Catalog("root");
+        metaInfo.setCatalog(catalog);
+        loadCatalogInfo(systemConfig, catalog, path);
+        metaInfo.setHashCode(hashCode);
+        try {
+            Files.write(new Gson().toJson(metaInfo).getBytes(), file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return metaInfo;
     }
 
-    private static void generateMetaInfo(List<Path> paths, MetaInfo metaInfo, final SystemConfig systemConfig) {
-        if (Boolean.TRUE.equals(metaInfo.getHashCode())) {
-            return;
+    private static void loadCatalogInfo(final SystemConfig systemConfig, final Catalog catalog, Path path) throws IOException {
+        File file = path.toFile();
+        if (file.isDirectory()) {
+            Catalog ct = new Catalog(path.getFileName().toString());
+            catalog.addCatalog(ct);
+            List<Path> lists = MoreFiles.listFiles(path);
+            for (Path p : lists) {
+                File f = p.toFile();
+                if (f.isDirectory()) {
+                    loadCatalogInfo(systemConfig, ct, p);
+                } else if (isMarkDownFile(p)) {
+                    ct.addMetaData(genMetaData(p, systemConfig));
+                }
+            }
+        } else if (isMarkDownFile(path)) {
+            catalog.addMetaData(genMetaData(path, systemConfig));
         }
-        boolean useFileName = systemConfig.getArticleTitle() == SystemConfig.TITLE.FILE_NAME;
-        for (Path path : paths) {
-            MetaData metaData = new MetaData(path);
-            File file = path.toFile();
-            List<String> lines = null;
-            try {
-                lines = Files.readLines(file, Charset.forName("UTF-8"));
-            } catch (Exception e) {
-                continue;
-            }
-            if (useFileName) {
-                metaData.setTitle(path.getFileName().toString());
-            } else {
-                metaData.setTitle(Iterables.getFirst(lines, path.getFileName().toString()));
-            }
-            if (!lines.isEmpty()) {
-                int size = lines.size();
-                String summary = Joiner.on("").join(lines.subList(1, systemConfig.getSummaryRows() > size ? size : systemConfig.getSummaryRows()));
-                metaData.setSummary(summary);
-            }
-            metaInfo.addMetaData(metaData);
+    }
+
+    private static boolean isMarkDownFile(Path path) {
+        return MARKDOWN_EXT.equals(Files.getFileExtension(path.getFileName().toString()));
+    }
+
+    private static MetaData genMetaData(final Path path, final SystemConfig systemConfig) {
+        MetaData metaData = new MetaData(path);
+        File file = path.toFile();
+        List<String> lines;
+        try {
+            lines = Files.readLines(file, Charset.forName("UTF-8"));
+        } catch (Exception e) {
+            return null;
         }
+        if (systemConfig.getArticleTitle() == SystemConfig.TITLE.FILE_NAME) {
+            metaData.setTitle(Files.getNameWithoutExtension(path.getFileName().toString()));
+        } else {
+            metaData.setTitle(Iterables.getFirst(lines, path.getFileName().toString()));
+        }
+        if (!lines.isEmpty()) {
+            int size = lines.size();
+            String summary = Joiner.on("\n").join(lines.subList(1, systemConfig.getSummaryRows() > size ? size : systemConfig.getSummaryRows()));
+            metaData.setSummary(summary.substring(1));
+        }
+        metaData.setLastModify(file.lastModified());
+        return metaData;
     }
 
     private static int calcHashCode(List<Path> paths) {
