@@ -5,8 +5,17 @@
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
 </head>
 <body>
-<div class="container">
-    <div th:utext="${value}"></div>
-</div>
+<header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li th:each="m:${menu}" th:text="${m}">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
 </body>
 </html>

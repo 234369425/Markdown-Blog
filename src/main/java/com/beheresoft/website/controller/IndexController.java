@@ -16,14 +16,16 @@ public class IndexController {
 
     private SystemDict systemDict;
 
-    public IndexController(SystemDict systemDict){
+    public IndexController(SystemDict systemDict) {
         this.systemDict = systemDict;
     }
 
     @RequestMapping("/")
-    public ModelAndView index(){
+    public ModelAndView index() {
         List<String> folders = this.systemDict.getMetaInfo().getCatalog().catalogs();
-        return new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("menu", folders);
+        return modelAndView;
     }
 
 }
