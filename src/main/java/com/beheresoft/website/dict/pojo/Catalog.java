@@ -2,24 +2,24 @@ package com.beheresoft.website.dict.pojo;
 
 import com.google.common.collect.Lists;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 /**
  * @author Aladi
  */
-@Setter
 public class Catalog {
 
     @Getter
     private String name;
-    private int hashcode;
+    @Getter
+    private long hashcode;
     private List<Catalog> subCatalogs = Lists.newArrayList();
     private List<MetaData> articles = Lists.newArrayList();
 
     public Catalog(String name) {
         this.name = name;
+        this.hashcode = HashCode.asLong(name);
     }
 
     public void addCatalog(Catalog catalog) {

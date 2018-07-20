@@ -12,12 +12,12 @@ import java.nio.file.Path;
 public class MetaData {
 
     public MetaData(Path path) {
-        this.hash = path.hashCode();
         this.absolutePath = path.toAbsolutePath().toString();
         this.path = path;
+        this.hash = HashCode.asLong(path.toFile().getName());
     }
 
-    private int hash;
+    private long hash;
     @Setter
     private String title;
     @Setter

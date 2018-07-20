@@ -95,7 +95,6 @@ public class MarkDownUtils {
         File file = path.toFile();
         if (file.isDirectory()) {
             Catalog ct = new Catalog(path.getFileName().toString());
-            ct.setHashcode(path.hashCode());
             catalog.addCatalog(ct);
             List<Path> lists = MoreFiles.listFiles(path);
             for (Path p : lists) {
