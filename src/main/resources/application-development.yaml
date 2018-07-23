@@ -10,3 +10,6 @@ website:
   markdownDir: E:/demo/articles
   indexDir: d:/website/index
   articleTitle: FILE_NAME
+server:
+  port: 9999
+
