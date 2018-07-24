@@ -11,6 +11,19 @@
     <link rel="stylesheet" href="/css/site-main.css">
 </head>
 
-<div>
 
+<div th:fragment="nav" class="container-fluid bg-dark">
+    <div class="container">
+        <nav class="nav navbar-expand-lg  navbar-dark" role="navigation">
+            <a class="navbar-brand h1" href="/">测试</a>
+            <ul class="nav navbar-nav justify-content-end">
+                <li class="nav-item" th:each="m:${navMenu}">
+                    <a class="nav-link" href="#" th:text="${m}"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.html">关于我</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>

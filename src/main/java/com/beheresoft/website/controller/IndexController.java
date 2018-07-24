@@ -23,10 +23,15 @@ public class IndexController {
 
     @RequestMapping("/")
     public ModelAndView index(Pageable page) {
-        List<String> folders = this.systemDict.getMetaInfo().getCatalog().catalogs();
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("menu", folders);
         modelAndView.addObject("articles", systemDict.listMetas(page));
+        return modelAndView;
+    }
+
+    @RequestMapping("/about.html")
+    public ModelAndView about() {
+        ModelAndView modelAndView = new ModelAndView("about");
+        modelAndView.addObject("data", null);
         return modelAndView;
     }
 

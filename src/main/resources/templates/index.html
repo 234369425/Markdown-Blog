@@ -4,22 +4,23 @@
 <head th:replace="component/header :: import">
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
 </head>
+<style>
+    .under-line {
+        padding-bottom: 15px;
+        border-bottom: 1px dotted black;
+    }
+</style>
 <body>
 <header>
-    <nav class="nav navbar-expand-lg  navbar-dark bg-dark" role="navigation">
-        <a class="navbar-brand mb-0 h1" href="">测试</a>
-        <ul class="nav navbar-nav justify-content-end">
-            <li class="nav-item" th:each="m:${menu}">
-                <a class="nav-link" href="#" th:text="${m}"></a>
-            </li>
-        </ul>
-    </nav>
+    <div th:replace="component/header :: nav">
+
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-sm-9">
                 <div class="row" th:each="a:${articles.content}">
                     <div class="col-sm-12">
-                        <div class="media">
+                        <div class="media under-line">
                             <div class="media-body">
                                 <div class="row">
                                     <div class="col-sm-7">
@@ -57,7 +58,10 @@
 
             </div>
             <div class="col-sm-3">
-
+                <div class="list-group">
+                    <div class="list-group-item text-center active">最新文章</div>
+                    <a href="#" th:each="n:${newest}" class="list-group-item" th:text="${n.title}"></a>
+                </div>
             </div>
         </div>
     </div>
