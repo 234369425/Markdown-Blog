@@ -1,4 +1,8 @@
 spring:
+  datasource:
+    url: jdbc:mysql://localhost/website?characterEncoding=utf8&useSSL=false
+    username: root
+    password: root
   thymeleaf:
     cache: false
     check-template-location: true
@@ -10,6 +14,12 @@ website:
   markdownDir: E:/demo/articles
   indexDir: d:/website/index
   articleTitle: FILE_NAME
+  gittalk:
+    owner:
+    repo:
+    oauth:
+      clientId:
+      secret:
 server:
   port: 9999
 

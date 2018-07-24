@@ -1,6 +1,7 @@
 package com.beheresoft.website.controller;
 
 import com.beheresoft.website.dict.SystemDict;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,10 +22,11 @@ public class IndexController {
     }
 
     @RequestMapping("/")
-    public ModelAndView index() {
+    public ModelAndView index(Pageable page) {
         List<String> folders = this.systemDict.getMetaInfo().getCatalog().catalogs();
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("menu", folders);
+        modelAndView.addObject("articles", systemDict.listMetas(page));
         return modelAndView;
     }
 

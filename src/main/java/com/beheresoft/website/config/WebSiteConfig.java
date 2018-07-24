@@ -12,17 +12,33 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("website")
 @Getter
 @Setter
-public class SystemConfig {
+public class WebSiteConfig {
 
     private String markdownDir;
     private String indexDir;
     private String metaFile = "metaInfo.json";
     private TITLE articleTitle;
     private int summaryRows = 4;
+    private GitTalk gitTalk;
 
     public enum TITLE {
         FILE_NAME,
         FIRST_ROW
+    }
+
+    @Getter
+    @Setter
+    public static class GitTalk {
+        private String owner;
+        private String repo;
+        private OAuth oauth;
+    }
+
+    @Getter
+    @Setter
+    public static class OAuth {
+        private String clientId;
+        private String secret;
     }
 
 }
