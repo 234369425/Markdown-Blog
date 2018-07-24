@@ -44,21 +44,22 @@ public class MarkDownUtils {
     /**
      * 按创建时间排序所有文章
      *
-     * @param systemConfig
-     * @return
-     * @throws IOException
+     * @param catalog 根目录
+     * @return List<MetaData> 所有文章列表
      */
-    public List<MetaData> listMarkDownFiles(final WebSiteConfig systemConfig) throws IOException {
-        List<Path> lists = Lists.newArrayList();
-        final Path path = Paths.get(systemConfig.getMarkdownDir());
-        listMarkDownFiles(path, lists);
-        final List<MetaData> metaInfos = Lists.newArrayList();
-        lists.forEach(p -> {
-            metaInfos.add(genMetaData(p, systemConfig));
-        });
-        return metaInfos.stream().
+    public List<MetaData> listMarkDownFiles(final Catalog catalog) {
+        List<MetaData> result = Lists.newArrayList();
+        addMetaDatas(catalog, result);
+        return result.stream().
                 sorted(Comparator.comparingLong(MetaData::getLastModify).reversed())
                 .collect(Collectors.toList());
+    }
+
+    private void addMetaDatas(Catalog catalog, List<MetaData> result) {
+        result.addAll(catalog.getArticles());
+        for (int i = 0; catalog.getSubCatalogs() != null && i < catalog.getSubCatalogs().size(); i++) {
+            addMetaDatas(catalog.getSubCatalogs().get(i), result);
+        }
     }
 
     /**
@@ -68,7 +69,7 @@ public class MarkDownUtils {
      * @param result 返回结果ref
      * @throws IOException 抛出异常
      */
-    public void listMarkDownFiles(final Path path, final List<Path> result) throws IOException {
+    private void listMarkDownFiles(final Path path, final List<Path> result) throws IOException {
         List<Path> paths = MoreFiles.listFiles(path);
         for (Path p : paths) {
             String ext = Files.getFileExtension(p.getFileName().toString());
@@ -91,7 +92,7 @@ public class MarkDownUtils {
             try {
                 metaInfo = new Gson().fromJson(Joiner.on("").join(contents), MetaInfo.class);
             } catch (Exception e) {
-
+                log.info("读取缓存文件错误{}", contents);
             }
         } else {
             Files.touch(file);
@@ -101,12 +102,12 @@ public class MarkDownUtils {
             metaInfo = new MetaInfo();
         }
 
-        int hashCode = calcHashCode(markDowns);
+        int hashCode = calcFolderHashCode(markDowns);
         //如果目录内的markdown文件没有变化
         if (metaInfo.getHashCode() == hashCode) {
             return metaInfo;
         }
-        Catalog catalog = new Catalog("root");
+        Catalog catalog = new Catalog("root", 21918);
         metaInfo.setCatalog(catalog);
         List<Path> list = MoreFiles.listFiles(path);
         for (Path p : list) {
@@ -124,7 +125,7 @@ public class MarkDownUtils {
     private void loadCatalogInfo(final WebSiteConfig systemConfig, final Catalog catalog, Path path) throws IOException {
         File file = path.toFile();
         if (file.isDirectory()) {
-            Catalog ct = new Catalog(path.getFileName().toString());
+            Catalog ct = new Catalog(path.getFileName().toString(), catalog.getHashcode());
             catalog.addCatalog(ct);
             List<Path> lists = MoreFiles.listFiles(path);
             for (Path p : lists) {
@@ -132,11 +133,11 @@ public class MarkDownUtils {
                 if (f.isDirectory()) {
                     loadCatalogInfo(systemConfig, ct, p);
                 } else if (isMarkDownFile(p)) {
-                    ct.addMetaData(genMetaData(p, systemConfig));
+                    ct.addMetaData(genMetaData(p, systemConfig, ct.getHashcode()));
                 }
             }
         } else if (isMarkDownFile(path)) {
-            catalog.addMetaData(genMetaData(path, systemConfig));
+            catalog.addMetaData(genMetaData(path, systemConfig, catalog.getHashcode()));
         }
     }
 
@@ -144,8 +145,8 @@ public class MarkDownUtils {
         return MARKDOWN_EXT.equals(Files.getFileExtension(path.getFileName().toString()));
     }
 
-    private MetaData genMetaData(final Path path, final WebSiteConfig systemConfig) {
-        MetaData metaData = new MetaData(path);
+    private MetaData genMetaData(final Path path, final WebSiteConfig systemConfig, final long parentHashCode) {
+        MetaData metaData = new MetaData(path, parentHashCode);
         File file = path.toFile();
         List<String> lines;
         try {
@@ -176,7 +177,7 @@ public class MarkDownUtils {
         return renderer.render(document);
     }
 
-    private int calcHashCode(List<Path> paths) {
+    private int calcFolderHashCode(List<Path> paths) {
         int hashCode = 0;
         for (Path p : paths) {
             if (hashCode == 0) {

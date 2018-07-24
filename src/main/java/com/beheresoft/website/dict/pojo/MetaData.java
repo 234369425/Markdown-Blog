@@ -11,10 +11,10 @@ import java.nio.file.Path;
 @Getter
 public class MetaData {
 
-    public MetaData(Path path) {
+    public MetaData(Path path, long parentHash) {
         this.absolutePath = path.toAbsolutePath().toString();
         this.path = path;
-        this.hash = HashCode.asLong(path.toFile().getName());
+        this.hash = HashCode.asLong(path.toFile().getName(), parentHash);
     }
 
     private long hash;

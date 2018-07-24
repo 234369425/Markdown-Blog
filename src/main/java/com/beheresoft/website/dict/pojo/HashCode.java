@@ -1,5 +1,7 @@
 package com.beheresoft.website.dict.pojo;
 
+import javax.validation.constraints.Null;
+
 /**
  * @author Aladi
  */
@@ -31,7 +33,20 @@ public class HashCode {
                 hash = 31 * hash + name[i];
             }
         }
-        return hash;
+        return Math.abs(hash);
+    }
+
+    public static long asLong(String s, long hash) {
+        if (s == null) {
+            throw new NullPointerException("s");
+        }
+        char[] name = s.toCharArray();
+        if (name.length > 0) {
+            for (int i = 0; i < name.length; i++) {
+                hash = 31 * hash + name[i];
+            }
+        }
+        return Math.abs(hash);
     }
 
 }

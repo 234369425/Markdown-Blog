@@ -60,7 +60,9 @@
             <div class="col-sm-3">
                 <div class="list-group">
                     <div class="list-group-item text-center active">最新文章</div>
-                    <a href="#" th:each="n:${newest}" class="list-group-item" th:text="${n.title}"></a>
+                    <a th:href="@{'/article/md/'+${n.hash}}" th:each="n:${newest}"
+                       class="list-group-item"
+                       th:text="${n.title}"></a>
                 </div>
             </div>
         </div>

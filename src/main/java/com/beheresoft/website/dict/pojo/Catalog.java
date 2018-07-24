@@ -14,12 +14,14 @@ public class Catalog {
     private String name;
     @Getter
     private long hashcode;
+    @Getter
     private List<Catalog> subCatalogs = Lists.newArrayList();
+    @Getter
     private List<MetaData> articles = Lists.newArrayList();
 
-    public Catalog(String name) {
+    public Catalog(String name, long parentHash) {
         this.name = name;
-        this.hashcode = HashCode.asLong(name);
+        this.hashcode = HashCode.asLong(name, parentHash);
     }
 
     public void addCatalog(Catalog catalog) {

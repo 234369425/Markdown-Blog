@@ -38,8 +38,8 @@ public class SystemDict implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         try {
-            markdownMetas = markDownUtils.listMarkDownFiles(websiteConfig);
             metaInfo = markDownUtils.loadCatalogInfo(websiteConfig);
+            markdownMetas = markDownUtils.listMarkDownFiles(metaInfo.getCatalog());
             System.out.println("");
         } catch (IOException e) {
             log.error("file path: mark down dir[{}] or file index [{}] not exists , cause: {} "
@@ -63,5 +63,19 @@ public class SystemDict implements CommandLineRunner {
         first = first >= maxIndex ? maxIndex : first;
         int last = maxIndex < first + size ? maxIndex + 1 : first + size;
         return new PageImpl<>(markdownMetas.subList(first, last), pageable, markdownMetas.size());
+    }
+
+    /**
+     * 根据文章hash查找文章
+     * @param hashcode
+     * @return
+     */
+    public MetaData findMetaDataByHashCode(final long hashcode) {
+        for (MetaData metaData : markdownMetas) {
+            if (metaData.getHash() == hashcode) {
+                return metaData;
+            }
+        }
+        return null;
     }
 }
