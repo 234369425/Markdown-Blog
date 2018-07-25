@@ -4,6 +4,7 @@ import com.beheresoft.website.config.WebSiteConfig;
 import com.beheresoft.website.dict.pojo.Catalog;
 import com.beheresoft.website.dict.pojo.MetaData;
 import com.beheresoft.website.dict.pojo.MetaInfo;
+import com.beheresoft.website.exception.ArticleNotFoundException;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -207,7 +208,14 @@ public class MarkDownUtils {
         if (metaData == null) {
             return "";
         }
-        File markDown = metaData.getPath().toFile();
+        return parse(metaData.getPath());
+    }
+
+    public String parse(Path path) throws IOException {
+        if (path == null) {
+            return "";
+        }
+        File markDown = path.toFile();
         String content = Joiner.on("\n").join(Files.readLines(markDown, webSiteConfig.getCharset()));
         return parse(content);
     }

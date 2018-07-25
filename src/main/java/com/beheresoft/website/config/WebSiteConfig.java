@@ -79,6 +79,7 @@ public class WebSiteConfig {
     public static class Page {
         private String logo;
         private String footer;
+        private String author;
     }
 
 }

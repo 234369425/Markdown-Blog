@@ -1,0 +1,9 @@
+
+<div th:fragment="newest" class="col-sm-3">
+    <div class="list-group">
+        <div class="list-group-item text-center active">最新文章</div>
+        <a th:href="@{'/article/md/get/'+${n.hash}}" th:each="n:${newest}"
+           class="list-group-item"
+           th:text="${n.title}"></a>
+    </div>
+</div>

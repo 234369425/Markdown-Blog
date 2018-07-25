@@ -16,6 +16,7 @@ website:
   articleTitle: FILE_NAME
   about: About.md
   page:
+    author: Aladi
     logo: '不能约的Secret'
     footer: '&copy; Aladi 2018 <br/>
      <a href="https://github.com/234369425/snow" target="_blank">

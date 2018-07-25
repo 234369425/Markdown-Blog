@@ -17,19 +17,19 @@
     </div>
 </header>
 
-<div class="container">
+<div class="container main-content">
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-9 ">
             <div class="row" th:each="a:${articles.content}">
                 <div class="col-sm-12">
                     <div class="media under-line">
                         <div class="media-body">
                             <div class="row">
                                 <div class="col-sm-7">
-                                    <h3 th:text="${a.title}"></h3>
+                                    <a th:href="@{'/article/md/get/'+${a.hash}}" ><h3 th:text="${a.title}"></h3></a>
                                 </div>
                                 <div class="col-sm-5 text-right ">
-                                    <span class="text-success">Aladi</span>
+                                    <span class="text-success" th:utext="${pageInfo.author}"></span>
                                     <span class="text-light bg-dark"
                                           th:text="${#dates.format(a.lastModify , 'yyyy-MM-dd HH:mm:ss')}"></span>
                                 </div>
@@ -59,19 +59,11 @@
             </nav>
 
         </div>
-        <div class="col-sm-3">
-            <div class="list-group">
-                <div class="list-group-item text-center active">最新文章</div>
-                <a th:href="@{'/article/md/get/'+${n.hash}}" th:each="n:${newest}"
-                   class="list-group-item"
-                   th:text="${n.title}"></a>
-            </div>
+        <div class="col-sm-3" th:include="component/rightArea::newest">
         </div>
     </div>
 </div>
 
-<footer th:replace="component/footer :: footer">
-
-</footer>
+<footer th:replace="component/footer :: footer"></footer>
 </body>
 </html>

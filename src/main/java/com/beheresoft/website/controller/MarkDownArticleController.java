@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+
 /**
  * @author Aladi
  */
@@ -36,9 +38,9 @@ public class MarkDownArticleController {
 
 
     @RequestMapping("/about.html")
-    public ModelAndView about() {
+    public ModelAndView about() throws ArticleNotFoundException {
         ModelAndView modelAndView = new ModelAndView("about");
-        modelAndView.addObject("content", "");
+        modelAndView.addObject("content", this.markDownArticleService.getAbout());
         return modelAndView;
     }
 

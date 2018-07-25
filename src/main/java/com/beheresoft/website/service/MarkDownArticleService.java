@@ -28,7 +28,16 @@ public class MarkDownArticleService {
             return this.markDownUtils.parse(metaData);
         } catch (IOException e) {
             e.printStackTrace();
-            return "";
+            throw new ArticleNotFoundException(hashcode);
+        }
+    }
+
+    public String getAbout() throws ArticleNotFoundException {
+        try {
+            return this.markDownUtils.parse(systemDict.getAbout());
+        }catch (IOException e){
+            e.printStackTrace();
+            throw new ArticleNotFoundException(21985);
         }
     }
 

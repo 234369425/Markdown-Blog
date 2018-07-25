@@ -8,5 +8,16 @@
     <div th:replace="component/header :: nav">
 
     </div>
+    <div class="container main-content">
+        <div class="row">
+            <div class="col-sm-8">
+                <div th:utext="${content}">
 
+                </div>
+            </div>
+            <div class="col-sm-3" th:include="component/rightArea::newest">
+            </div>
+        </div>
+    </div>
+    <footer th:replace="component/footer :: footer"></footer>
 </body>
