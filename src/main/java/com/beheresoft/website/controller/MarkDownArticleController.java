@@ -21,13 +21,15 @@ public class MarkDownArticleController {
 
     @RequestMapping("/get/{hashcode}")
     public ModelAndView get(@PathVariable("hashcode") Long hashCode) {
-        this.markDownArticleService.search(hashCode);
+        ModelAndView modelAndView = new ModelAndView("article");
+        modelAndView.addObject("content", this.markDownArticleService.search(hashCode));
+        return modelAndView;
     }
 
     @RequestMapping("/list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("markdown");
-        modelAndView.addObject("value", markDownArticleService.get());
+        modelAndView.addObject("value", markDownArticleService.search(111));
         return modelAndView;
     }
 

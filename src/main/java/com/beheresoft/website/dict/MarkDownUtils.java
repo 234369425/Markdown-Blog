@@ -35,10 +35,12 @@ public class MarkDownUtils {
     private final static String MARKDOWN_EXT = "md";
     private HtmlRenderer renderer;
     private Parser parser;
+    private WebSiteConfig webSiteConfig;
 
-    private MarkDownUtils(HtmlRenderer renderer, Parser parser) {
+    private MarkDownUtils(WebSiteConfig webSiteConfig, HtmlRenderer renderer, Parser parser) {
         this.renderer = renderer;
         this.parser = parser;
+        this.webSiteConfig = webSiteConfig;
     }
 
     /**
@@ -81,14 +83,16 @@ public class MarkDownUtils {
         }
     }
 
-    public MetaInfo loadCatalogInfo(final WebSiteConfig systemConfig) throws IOException {
-        final Path path = Paths.get(systemConfig.getMarkdownDir());
+    public MetaInfo loadCatalogInfo() throws IOException {
+        log.info("file path: mark down dir[{}] or file index [{}] "
+                , webSiteConfig.getMarkdownDir(), webSiteConfig.getIndexDir());
+        final Path path = Paths.get(webSiteConfig.getMarkdownDir());
         final List<Path> markDowns = Lists.newArrayList();
         listMarkDownFiles(path, markDowns);
         MetaInfo metaInfo = null;
-        File file = new File(path.toAbsolutePath().toString() + "/" + systemConfig.getMetaFile());
+        File file = new File(path.toAbsolutePath().toString() + "/" + webSiteConfig.getMetaFile());
         if (file.exists()) {
-            List<String> contents = Files.readLines(file, Charset.forName("UTF-8"));
+            List<String> contents = Files.readLines(file, webSiteConfig.getCharset());
             try {
                 metaInfo = new Gson().fromJson(Joiner.on("").join(contents), MetaInfo.class);
             } catch (Exception e) {
@@ -111,7 +115,7 @@ public class MarkDownUtils {
         metaInfo.setCatalog(catalog);
         List<Path> list = MoreFiles.listFiles(path);
         for (Path p : list) {
-            loadCatalogInfo(systemConfig, catalog, p);
+            loadCatalogInfo(catalog, p);
         }
         metaInfo.setHashCode(hashCode);
         try {
@@ -122,7 +126,7 @@ public class MarkDownUtils {
         return metaInfo;
     }
 
-    private void loadCatalogInfo(final WebSiteConfig systemConfig, final Catalog catalog, Path path) throws IOException {
+    private void loadCatalogInfo(final Catalog catalog, Path path) throws IOException {
         File file = path.toFile();
         if (file.isDirectory()) {
             Catalog ct = new Catalog(path.getFileName().toString(), catalog.getHashcode());
@@ -131,13 +135,13 @@ public class MarkDownUtils {
             for (Path p : lists) {
                 File f = p.toFile();
                 if (f.isDirectory()) {
-                    loadCatalogInfo(systemConfig, ct, p);
+                    loadCatalogInfo(ct, p);
                 } else if (isMarkDownFile(p)) {
-                    ct.addMetaData(genMetaData(p, systemConfig, ct.getHashcode()));
+                    ct.addMetaData(genMetaData(p, ct.getHashcode()));
                 }
             }
         } else if (isMarkDownFile(path)) {
-            catalog.addMetaData(genMetaData(path, systemConfig, catalog.getHashcode()));
+            catalog.addMetaData(genMetaData(path, catalog.getHashcode()));
         }
     }
 
@@ -145,28 +149,37 @@ public class MarkDownUtils {
         return MARKDOWN_EXT.equals(Files.getFileExtension(path.getFileName().toString()));
     }
 
-    private MetaData genMetaData(final Path path, final WebSiteConfig systemConfig, final long parentHashCode) {
+    private MetaData genMetaData(final Path path, final long parentHashCode) {
         MetaData metaData = new MetaData(path, parentHashCode);
         File file = path.toFile();
         List<String> lines;
         try {
-            lines = Files.readLines(file, Charset.forName("UTF-8"));
+            lines = Files.readLines(file, webSiteConfig.getCharset());
         } catch (Exception e) {
             return null;
         }
-        if (systemConfig.getArticleTitle() == WebSiteConfig.TITLE.FILE_NAME) {
+        if (webSiteConfig.getArticleTitle() == WebSiteConfig.TITLE.FILE_NAME) {
             metaData.setTitle(Files.getNameWithoutExtension(path.getFileName().toString()));
         } else {
             metaData.setTitle(Iterables.getFirst(lines, path.getFileName().toString()));
         }
         if (!lines.isEmpty()) {
             int size = lines.size();
-            String summary = Joiner.on("\n").join(lines.subList(1, systemConfig.getSummaryRows() > size ? size : systemConfig.getSummaryRows()));
+            String summary = Joiner.on("\n").join(lines.subList(1, webSiteConfig.getSummaryRows() > size ? size : webSiteConfig.getSummaryRows()));
             metaData.setSummary(summary.substring(1));
         }
         metaData.setSummary(parse(metaData.getSummary()));
         metaData.setLastModify(file.lastModified());
         return metaData;
+    }
+
+    public String parse(MetaData metaData) throws IOException {
+        if (metaData == null) {
+            return "";
+        }
+        File markDown = metaData.getPath().toFile();
+        String content = Joiner.on("\n").join(Files.readLines(markDown, webSiteConfig.getCharset()));
+        return parse(content);
     }
 
     public String parse(String markdown) {

@@ -38,12 +38,10 @@ public class SystemDict implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         try {
-            metaInfo = markDownUtils.loadCatalogInfo(websiteConfig);
+            metaInfo = markDownUtils.loadCatalogInfo();
             markdownMetas = markDownUtils.listMarkDownFiles(metaInfo.getCatalog());
             System.out.println("");
         } catch (IOException e) {
-            log.error("file path: mark down dir[{}] or file index [{}] not exists , cause: {} "
-                    , websiteConfig.getMarkdownDir(), websiteConfig.getIndexDir(), e.getMessage());
 
             System.exit(5005);
         }
