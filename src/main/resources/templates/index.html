@@ -15,58 +15,63 @@
     <div th:replace="component/header :: nav">
 
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-9">
-                <div class="row" th:each="a:${articles.content}">
-                    <div class="col-sm-12">
-                        <div class="media under-line">
-                            <div class="media-body">
-                                <div class="row">
-                                    <div class="col-sm-7">
-                                        <h3 th:text="${a.title}"></h3>
-                                    </div>
-                                    <div class="col-sm-5 text-right ">
-                                        <span class="text-success">Aladi</span>
-                                        <span class="text-light bg-dark"
-                                              th:text="${#dates.format(a.lastModify , 'yyyy-MM-dd HH:mm:ss')}"></span>
-                                    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="row" th:each="a:${articles.content}">
+                <div class="col-sm-12">
+                    <div class="media under-line">
+                        <div class="media-body">
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <h3 th:text="${a.title}"></h3>
                                 </div>
-                                <div class="media-body" th:utext="${a.summary}">
+                                <div class="col-sm-5 text-right ">
+                                    <span class="text-success">Aladi</span>
+                                    <span class="text-light bg-dark"
+                                          th:text="${#dates.format(a.lastModify , 'yyyy-MM-dd HH:mm:ss')}"></span>
                                 </div>
+                            </div>
+                            <div class="media-body" th:utext="${a.summary}">
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 text-left">
-                    </div>
-                    <hr/>
                 </div>
-
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-
+                <div class="col-sm-12 text-left">
+                </div>
+                <hr/>
             </div>
-            <div class="col-sm-3">
-                <div class="list-group">
-                    <div class="list-group-item text-center active">最新文章</div>
-                    <a th:href="@{'/article/md/'+${n.hash}}" th:each="n:${newest}"
-                       class="list-group-item"
-                       th:text="${n.title}"></a>
-                </div>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+        <div class="col-sm-3">
+            <div class="list-group">
+                <div class="list-group-item text-center active">最新文章</div>
+                <a th:href="@{'/article/md/get/'+${n.hash}}" th:each="n:${newest}"
+                   class="list-group-item"
+                   th:text="${n.title}"></a>
             </div>
         </div>
     </div>
-</header>
+</div>
+
+<footer th:replace="component/footer :: footer">
+
+</footer>
 </body>
 </html>

@@ -14,6 +14,12 @@ website:
   markdownDir: E:/demo/articles
   indexDir: d:/website/index
   articleTitle: FILE_NAME
+  about: About.md
+  page:
+    logo: '不能约的Secret'
+    footer: '&copy; Aladi 2018 <br/>
+     <a href="https://github.com/234369425/snow" target="_blank">
+     <span class="badge badge-primary">Markdown blog，welcome join</a></span>'
   gittalk:
     owner:
     repo:

@@ -26,11 +26,4 @@ public class IndexController {
         return modelAndView;
     }
 
-    @RequestMapping("/about.html")
-    public ModelAndView about() {
-        ModelAndView modelAndView = new ModelAndView("about");
-        modelAndView.addObject("data", "");
-        return modelAndView;
-    }
-
 }

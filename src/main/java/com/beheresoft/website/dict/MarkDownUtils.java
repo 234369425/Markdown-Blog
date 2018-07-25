@@ -42,6 +42,24 @@ public class MarkDownUtils {
         this.webSiteConfig = webSiteConfig;
     }
 
+    public Path filterAbout(List<MetaData> metaDataList) {
+        int index = -1;
+        for (int i = 0; i < metaDataList.size(); i++) {
+            if (getFileName(metaDataList.get(i).getPath()).equalsIgnoreCase(webSiteConfig.getAbout())) {
+                index = i;
+                break;
+            }
+        }
+
+        Path path = null;
+        if (index >= 0) {
+            path = Paths.get(metaDataList.get(index).getAbsolutePath());
+            metaDataList.remove(index);
+        }
+        return path;
+
+    }
+
     /**
      * 按创建时间排序所有文章
      *
@@ -175,10 +193,12 @@ public class MarkDownUtils {
         }
         if (!lines.isEmpty()) {
             int size = lines.size();
-            String summary = Joiner.on("\n").join(lines.subList(1, webSiteConfig.getSummaryRows() > size ? size : webSiteConfig.getSummaryRows()));
-            metaData.setSummary(summary.substring(1));
+            int summaryTo = webSiteConfig.getSummaryTo() > size ? size : webSiteConfig.getSummaryTo();
+            String summary = Joiner.on("\n").join(lines.subList(webSiteConfig.getSummaryFrom(), summaryTo));
+            metaData.setSummary(summary);
+            metaData.setSummary(parse(metaData.getSummary()));
+
         }
-        metaData.setSummary(parse(metaData.getSummary()));
         metaData.setLastModify(file.lastModified());
         return metaData;
     }

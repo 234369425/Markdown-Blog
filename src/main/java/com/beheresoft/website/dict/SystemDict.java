@@ -1,7 +1,9 @@
 package com.beheresoft.website.dict;
 
+import com.beheresoft.website.config.WebSiteConfig;
 import com.beheresoft.website.dict.pojo.MetaData;
 import com.beheresoft.website.dict.pojo.MetaInfo;
+import com.beheresoft.website.exception.ArticleNotFoundException;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -28,13 +31,17 @@ public class SystemDict implements CommandLineRunner {
     private MarkDownUtils markDownUtils;
     private ThymeleafViewResolver viewResolver;
     private ApplicationContext applicationContext;
+    private WebSiteConfig.Page page;
+    private Path about;
 
 
     public SystemDict(MarkDownUtils markDownUtils,
+                      WebSiteConfig webSiteConfig,
                       ThymeleafViewResolver viewResolver, ApplicationContext applicationContext) {
         this.markDownUtils = markDownUtils;
         this.viewResolver = viewResolver;
         this.applicationContext = applicationContext;
+        this.page = webSiteConfig.getPage();
     }
 
     @Override
@@ -42,6 +49,7 @@ public class SystemDict implements CommandLineRunner {
         try {
             metaInfo = markDownUtils.loadCatalogInfo();
             markdownMetas = markDownUtils.listMarkDownFiles(metaInfo.getCatalog());
+            about = markDownUtils.filterAbout(markdownMetas);
         } catch (IOException e) {
             SpringApplication.exit(applicationContext);
         }
@@ -49,6 +57,7 @@ public class SystemDict implements CommandLineRunner {
         List<String> folders = this.metaInfo.getCatalog().catalogs();
         int lastIndex = 10 > markdownMetas.size() ? markdownMetas.size() : 10;
         viewResolver.setStaticVariables(ImmutableMap.of("navMenu", folders,
+                "pageInfo", page,
                 "newest", markdownMetas.subList(0, lastIndex)));
     }
 
@@ -68,12 +77,16 @@ public class SystemDict implements CommandLineRunner {
      * @param hashcode 文件的hashcode
      * @return 找到的MetaData
      */
-    public MetaData findMetaDataByHashCode(final long hashcode) {
+    public MetaData findMetaDataByHashCode(final long hashcode) throws ArticleNotFoundException {
         for (MetaData metaData : markdownMetas) {
             if (metaData.getHash() == hashcode) {
                 return metaData;
             }
         }
-        return null;
+        throw new ArticleNotFoundException(hashcode);
+    }
+
+    public Path getAbout() {
+        return about;
     }
 }

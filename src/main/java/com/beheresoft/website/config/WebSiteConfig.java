@@ -20,9 +20,25 @@ public class WebSiteConfig {
     private String indexDir;
     private String metaFile = "metaInfo.json";
     private String charset = "UTF-8";
-    private TITLE articleTitle;
+    private String about = "About.md";
+    private TITLE articleTitle = TITLE.FILE_NAME;
+    private Page page;
     private int summaryRows = 4;
     private GitTalk gitTalk;
+
+    public int getSummaryFrom() {
+        if (articleTitle == TITLE.FILE_NAME) {
+            return 1;
+        }
+        return 0;
+    }
+
+    public int getSummaryTo() {
+        if (articleTitle == TITLE.FILE_NAME) {
+            return summaryRows;
+        }
+        return summaryRows + 1;
+    }
 
     public String getCharsetName() {
         return charset;
@@ -56,6 +72,13 @@ public class WebSiteConfig {
     public static class Oauth {
         private String clientId;
         private String secret;
+    }
+
+    @Getter
+    @Setter
+    public static class Page {
+        private String logo;
+        private String footer;
     }
 
 }

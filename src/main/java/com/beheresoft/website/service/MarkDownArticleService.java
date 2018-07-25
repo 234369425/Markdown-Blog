@@ -3,6 +3,7 @@ package com.beheresoft.website.service;
 import com.beheresoft.website.dict.MarkDownUtils;
 import com.beheresoft.website.dict.SystemDict;
 import com.beheresoft.website.dict.pojo.MetaData;
+import com.beheresoft.website.exception.ArticleNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class MarkDownArticleService {
         this.markDownUtils = markDownUtils;
     }
 
-    public String search(long hashcode) {
+    public String search(long hashcode) throws ArticleNotFoundException {
         MetaData metaData = systemDict.findMetaDataByHashCode(hashcode);
         try {
             return this.markDownUtils.parse(metaData);

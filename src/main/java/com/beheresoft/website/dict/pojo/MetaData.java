@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author Aladi
@@ -26,5 +27,12 @@ public class MetaData {
     @Setter
     private long lastModify;
     private transient Path path;
+
+    public Path getPath() {
+        if (path == null) {
+            path = Paths.get(absolutePath);
+        }
+        return path;
+    }
 
 }
