@@ -6,6 +6,8 @@ import com.beheresoft.website.dict.pojo.MetaInfo;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,12 +29,15 @@ public class SystemDict implements CommandLineRunner {
     private List<MetaData> markdownMetas;
     private MarkDownUtils markDownUtils;
     private ThymeleafViewResolver viewResolver;
+    private ApplicationContext applicationContext;
 
 
-    public SystemDict(WebSiteConfig systemConfig, MarkDownUtils markDownUtils, ThymeleafViewResolver viewResolver) {
+    public SystemDict(WebSiteConfig systemConfig, MarkDownUtils markDownUtils,
+                      ThymeleafViewResolver viewResolver, ApplicationContext applicationContext) {
         this.websiteConfig = systemConfig;
         this.markDownUtils = markDownUtils;
         this.viewResolver = viewResolver;
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -40,10 +45,8 @@ public class SystemDict implements CommandLineRunner {
         try {
             metaInfo = markDownUtils.loadCatalogInfo();
             markdownMetas = markDownUtils.listMarkDownFiles(metaInfo.getCatalog());
-            System.out.println("");
         } catch (IOException e) {
-
-            System.exit(5005);
+            SpringApplication.exit(applicationContext);
         }
         //顺便设置静态导航栏
         List<String> folders = this.metaInfo.getCatalog().catalogs();
@@ -65,6 +68,7 @@ public class SystemDict implements CommandLineRunner {
 
     /**
      * 根据文章hash查找文章
+     *
      * @param hashcode
      * @return
      */

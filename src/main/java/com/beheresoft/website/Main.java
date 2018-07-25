@@ -3,6 +3,9 @@ package com.beheresoft.website;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * @author Aladi
+ */
 @SpringBootApplication
 public class Main {
 

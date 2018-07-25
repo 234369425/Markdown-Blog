@@ -10,12 +10,14 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.common.io.MoreFiles;
 import com.google.gson.Gson;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.awt.print.Pageable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -74,7 +76,7 @@ public class MarkDownUtils {
     private void listMarkDownFiles(final Path path, final List<Path> result) throws IOException {
         List<Path> paths = MoreFiles.listFiles(path);
         for (Path p : paths) {
-            String ext = Files.getFileExtension(p.getFileName().toString());
+            String ext = Files.getFileExtension(getFileName(p));
             if (p.toFile().isDirectory()) {
                 listMarkDownFiles(p, result);
             } else if (ext.equals(MARKDOWN_EXT)) {
@@ -119,17 +121,28 @@ public class MarkDownUtils {
         }
         metaInfo.setHashCode(hashCode);
         try {
-            Files.write(new Gson().toJson(metaInfo).getBytes(), file);
+            Files.write(new Gson().toJson(metaInfo).getBytes(webSiteConfig.getCharsetName()), file);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return metaInfo;
     }
 
+    private String getFileName(Path path) {
+        if (path == null) {
+            return "";
+        }
+        path = path.getFileName();
+        if (path == null) {
+            return "";
+        }
+        return path.toString();
+    }
+
     private void loadCatalogInfo(final Catalog catalog, Path path) throws IOException {
         File file = path.toFile();
         if (file.isDirectory()) {
-            Catalog ct = new Catalog(path.getFileName().toString(), catalog.getHashcode());
+            Catalog ct = new Catalog(getFileName(path), catalog.getHashcode());
             catalog.addCatalog(ct);
             List<Path> lists = MoreFiles.listFiles(path);
             for (Path p : lists) {
@@ -146,7 +159,7 @@ public class MarkDownUtils {
     }
 
     private boolean isMarkDownFile(Path path) {
-        return MARKDOWN_EXT.equals(Files.getFileExtension(path.getFileName().toString()));
+        return MARKDOWN_EXT.equals(Files.getFileExtension(getFileName(path)));
     }
 
     private MetaData genMetaData(final Path path, final long parentHashCode) {
@@ -159,9 +172,9 @@ public class MarkDownUtils {
             return null;
         }
         if (webSiteConfig.getArticleTitle() == WebSiteConfig.TITLE.FILE_NAME) {
-            metaData.setTitle(Files.getNameWithoutExtension(path.getFileName().toString()));
+            metaData.setTitle(Files.getNameWithoutExtension(getFileName(path)));
         } else {
-            metaData.setTitle(Iterables.getFirst(lines, path.getFileName().toString()));
+            metaData.setTitle(Iterables.getFirst(lines, getFileName(path)));
         }
         if (!lines.isEmpty()) {
             int size = lines.size();

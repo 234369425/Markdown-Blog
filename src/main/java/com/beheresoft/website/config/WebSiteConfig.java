@@ -24,12 +24,22 @@ public class WebSiteConfig {
     private int summaryRows = 4;
     private GitTalk gitTalk;
 
+    public String getCharsetName() {
+        return charset;
+    }
+
     public Charset getCharset() {
         return Charset.forName(charset);
     }
 
     public enum TITLE {
+        /**
+         * 文件名称
+         */
         FILE_NAME,
+        /**
+         * 第一行
+         */
         FIRST_ROW
     }
 
@@ -38,12 +48,12 @@ public class WebSiteConfig {
     public static class GitTalk {
         private String owner;
         private String repo;
-        private OAuth oauth;
+        private Oauth oauth;
     }
 
     @Getter
     @Setter
-    public static class OAuth {
+    public static class Oauth {
         private String clientId;
         private String secret;
     }
