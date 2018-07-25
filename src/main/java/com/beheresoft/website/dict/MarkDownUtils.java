@@ -10,17 +10,14 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.common.io.MoreFiles;
 import com.google.gson.Gson;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.awt.print.Pageable;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
@@ -195,7 +192,7 @@ public class MarkDownUtils {
         return parse(content);
     }
 
-    public String parse(String markdown) {
+    private String parse(String markdown) {
         if (markdown == null) {
             return "";
         }

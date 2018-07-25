@@ -1,6 +1,5 @@
 package com.beheresoft.website.dict;
 
-import com.beheresoft.website.config.WebSiteConfig;
 import com.beheresoft.website.dict.pojo.MetaData;
 import com.beheresoft.website.dict.pojo.MetaInfo;
 import com.google.common.collect.ImmutableMap;
@@ -24,7 +23,6 @@ import java.util.List;
 @Slf4j
 public class SystemDict implements CommandLineRunner {
 
-    private final WebSiteConfig websiteConfig;
     private MetaInfo metaInfo;
     private List<MetaData> markdownMetas;
     private MarkDownUtils markDownUtils;
@@ -32,9 +30,8 @@ public class SystemDict implements CommandLineRunner {
     private ApplicationContext applicationContext;
 
 
-    public SystemDict(WebSiteConfig systemConfig, MarkDownUtils markDownUtils,
+    public SystemDict(MarkDownUtils markDownUtils,
                       ThymeleafViewResolver viewResolver, ApplicationContext applicationContext) {
-        this.websiteConfig = systemConfig;
         this.markDownUtils = markDownUtils;
         this.viewResolver = viewResolver;
         this.applicationContext = applicationContext;
@@ -53,7 +50,6 @@ public class SystemDict implements CommandLineRunner {
         int lastIndex = 10 > markdownMetas.size() ? markdownMetas.size() : 10;
         viewResolver.setStaticVariables(ImmutableMap.of("navMenu", folders,
                 "newest", markdownMetas.subList(0, lastIndex)));
-        ;
     }
 
     public Page<MetaData> listMetas(Pageable pageable) {
@@ -69,8 +65,8 @@ public class SystemDict implements CommandLineRunner {
     /**
      * 根据文章hash查找文章
      *
-     * @param hashcode
-     * @return
+     * @param hashcode 文件的hashcode
+     * @return 找到的MetaData
      */
     public MetaData findMetaDataByHashCode(final long hashcode) {
         for (MetaData metaData : markdownMetas) {

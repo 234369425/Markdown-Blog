@@ -14,8 +14,7 @@ public class VladschConfig {
 
     @Bean
     public MutableDataSet mutableDataSet() {
-        MutableDataSet mutableDataSet = new MutableDataSet();
-        return mutableDataSet;
+        return new MutableDataSet();
     }
 
     @Bean

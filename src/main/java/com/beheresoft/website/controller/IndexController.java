@@ -6,8 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-
 /**
  * @author Aladi
  */
@@ -31,7 +29,7 @@ public class IndexController {
     @RequestMapping("/about.html")
     public ModelAndView about() {
         ModelAndView modelAndView = new ModelAndView("about");
-        modelAndView.addObject("data", null);
+        modelAndView.addObject("data", "");
         return modelAndView;
     }
 
