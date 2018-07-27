@@ -88,6 +88,8 @@ public class WebSiteConfig {
         private String logo;
         private String footer;
         private String author;
+        private String keywords;
+        private String titleSuffix = "个人随笔";
         private Integer pageSize = 10;
         private Integer newestSize = 5;
     }

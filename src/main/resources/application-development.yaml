@@ -1,4 +1,12 @@
 spring:
+  mvc:
+    favicon:
+      enabled: false
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
   datasource:
     url: jdbc:mysql://localhost/website?characterEncoding=utf8&useSSL=false
     username: root
@@ -19,10 +27,13 @@ website:
     pageSize: 10
     newesetSize: 5
     author: Aladi
-    logo: '不能约的Secret'
+    logo: '<img class="align-bottom" src="/bug32.png"/><img src="/cat48.png">不能约的Secret'
     footer: '&copy; Aladi 2018 <br/>
      <a href="https://github.com/234369425/snow" target="_blank">
      <span class="badge badge-primary">Markdown blog，welcome join</a></span>'
+    keywords: ''
+    titleSuffix: '个人随笔'
+
   gittalk:
     owner:
     repo:

@@ -1,33 +1,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head th:fragment="import">
+
+<head th:fragment="head(title,meta)">
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title th:replace="${title}"></title>
+    <meta th:replace="${meta}">
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
+    <link rel="stylesheet" href="/css/web-site.css" charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/site-main.css">
-    <style>
-        .main-content {
-            min-height: 400px;
-            height: auto !important;
-        }
-    </style>
 </head>
 
 
-<div th:fragment="nav" class="container-fluid bg-dark" style="margin-bottom:1.5rem;">
+<div th:fragment="nav" class="container-fluid bg-dark " style="margin-bottom:1.5rem;">
     <div class="container">
-        <nav class="nav navbar-expand-lg  navbar-dark" role="navigation">
+        <nav class="nav navbar-expand-lg navbar-dark" role="navigation">
             <a class="navbar-brand h1" href="/" th:utext="${pageInfo.logo}"></a>
-            <ul class="nav navbar-nav justify-content-end">
+            <ul class="nav navbar-nav site-nav justify-content-end">
                 <li class="nav-item" th:each="m:${navMenu}">
-                    <a class="nav-link" href="#" th:text="${m}"></a>
+                    <a class="align-middle nav-link" href="#" th:text="${m}"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/article/md/about.html">About</a>
+                    <a class="nav-link align-middle" href="/article/md/about.html">About</a>
                 </li>
             </ul>
         </nav>

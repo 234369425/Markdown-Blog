@@ -1,3 +1,7 @@
+<!doctype html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="ch" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <nav th:fragment="page" th:if="${articles != null}" aria-label="Page navigation">
     <ul class="pagination justify-content-center"
         th:with="p=${articles},

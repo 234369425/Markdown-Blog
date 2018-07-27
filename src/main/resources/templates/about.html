@@ -1,7 +1,9 @@
 <!doctype html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html lang="ch" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head th:replace="component/header :: import">
+<head th:replace="component/header :: head(~{::title},~{::meta})">
+    <title th:text='${ "About " + pageInfo.author}'></title>
+    <meta name="keywords" th:content='${pageInfo.author}''>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
 </head>
 <body>
