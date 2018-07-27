@@ -35,7 +35,7 @@ public class SystemDict implements CommandLineRunner {
     private ThymeleafViewResolver viewResolver;
     private ApplicationContext applicationContext;
     private WebSiteConfig.Page page;
-    private WebSiteConfig.GitTalk gitTalk;
+    private WebSiteConfig.GiTalk giTalk;
     private Path about;
 
 
@@ -46,7 +46,7 @@ public class SystemDict implements CommandLineRunner {
         this.viewResolver = viewResolver;
         this.applicationContext = applicationContext;
         this.page = webSiteConfig.getPage();
-        this.gitTalk = webSiteConfig.getGitTalk();
+        this.giTalk = webSiteConfig.getGiTalk();
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SystemDict implements CommandLineRunner {
         int lastIndex = page.getNewestSize() > markdownMetas.size() ? markdownMetas.size() : page.getNewestSize();
         viewResolver.setStaticVariables(ImmutableMap.of("navMenu", this.metaInfo.getCatalog(),
                 "pageInfo", page,
-                "gitTalk", gitTalk,
+                "giTalk", giTalk,
                 "newest", markdownMetas.subList(0, lastIndex)));
     }
 

@@ -34,7 +34,7 @@ public class WebSiteConfig {
     private TITLE articleTitle = TITLE.FILE_NAME;
     private Page page;
     private int summaryRows = 4;
-    private GitTalk gitTalk;
+    private GiTalk giTalk;
 
     public String getIndexDir() {
         if (indexDir == null) {
@@ -78,7 +78,7 @@ public class WebSiteConfig {
 
     @Getter
     @Setter
-    public static class GitTalk {
+    public static class GiTalk {
         private Boolean enable = Boolean.FALSE;
         private String owner;
         private String admin;

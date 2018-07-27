@@ -17,7 +17,7 @@ website:
      <img src="/cat32.png"><span class="badge badge-primary">Markdown blog，welcome join</a></span>'
     keywords: ''
     titleSuffix: '个人随笔'
-  gittalk:
+  giTalk:
     enable: true
     owner: 234369425
     admin: 234369425
