@@ -16,6 +16,8 @@ website:
   articleTitle: FILE_NAME
   about: About.md
   page:
+    pageSize: 10
+    newesetSize: 5
     author: Aladi
     logo: '不能约的Secret'
     footer: '&copy; Aladi 2018 <br/>

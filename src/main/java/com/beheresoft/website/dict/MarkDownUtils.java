@@ -129,7 +129,7 @@ public class MarkDownUtils {
         if (metaInfo.getHashCode() == hashCode) {
             return metaInfo;
         }
-        Catalog catalog = new Catalog("root", 21918);
+        Catalog catalog = new Catalog("root", 17);
         metaInfo.setCatalog(catalog);
         List<Path> list = MoreFiles.listFiles(path);
         for (Path p : list) {

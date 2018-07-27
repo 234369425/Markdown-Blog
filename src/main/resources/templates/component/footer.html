@@ -1,18 +1,19 @@
 <nav th:fragment="page" th:if="${articles != null}" aria-label="Page navigation">
     <ul class="pagination justify-content-center"
         th:with="p=${articles},
+        current=${p.getNumber()},
         start=${ p.getNumber() - 3 },
         start=${start < 0 ? 0 : start},
         end=${ p.getNumber() + 3 },
         end=${ end >= p.getTotalPages() ? p.getTotalPages() - 1 : end}">
         <li th:class='${ "page-item " + (p.isFirst()?"disabled":"")}'>
-            <a class="page-link" href="#">&larrtl;</a>
+            <a class="page-link" th:href="${#httpServletRequest.getContextPath() + '?page='+(current-1)  }">&larrtl;</a>
         </li>
-        <li th:each="i:${#numbers.sequence(start,end)}" th:class='${"page-item " + (p.getNumber()==i?"active disabled":"") }'>
-            <a class="page-link" href="#" th:text="${i + 1}"></a>
+        <li th:each="i:${#numbers.sequence(start,end)}" th:class='${"page-item " + (current==i?"active disabled":"") }'>
+            <a class="page-link" th:href="${#httpServletRequest.getContextPath() + '?page='+(i)  }" th:text="${i + 1}"></a>
         </li>
         <li th:class='${ "page-item " + (p.isLast()?"disabled":"")}'>
-            <a class="page-link" href="#">&rarrtl;</a>
+            <a class="page-link" th:href="${#httpServletRequest.getContextPath() + '?page='+(current+1)  }">&rarrtl;</a>
         </li>
     </ul>
 </nav>

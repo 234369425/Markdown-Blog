@@ -21,10 +21,18 @@ public class WebSiteConfig {
     private String metaFile = "metaInfo.json";
     private String charset = "UTF-8";
     private String about = "About.md";
+    private String counterFile = "viewers.json";
     private TITLE articleTitle = TITLE.FILE_NAME;
     private Page page;
     private int summaryRows = 4;
     private GitTalk gitTalk;
+
+    public String getIndexDir() {
+        if (indexDir == null) {
+            return markdownDir;
+        }
+        return indexDir;
+    }
 
     public int getSummaryFrom() {
         if (articleTitle == TITLE.FILE_NAME) {
@@ -80,6 +88,8 @@ public class WebSiteConfig {
         private String logo;
         private String footer;
         private String author;
+        private Integer pageSize = 10;
+        private Integer newestSize = 5;
     }
 
 }

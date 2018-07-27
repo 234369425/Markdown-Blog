@@ -1,5 +1,6 @@
 package com.beheresoft.website.controller;
 
+import com.beheresoft.website.dict.ViewerCounter;
 import com.beheresoft.website.exception.ArticleNotFoundException;
 import com.beheresoft.website.service.MarkDownArticleService;
 import org.springframework.stereotype.Controller;
@@ -17,15 +18,18 @@ import java.io.IOException;
 public class MarkDownArticleController {
 
     private MarkDownArticleService markDownArticleService;
+    private ViewerCounter counter;
 
-    public MarkDownArticleController(MarkDownArticleService articleService) {
+    public MarkDownArticleController(MarkDownArticleService articleService, ViewerCounter counter) {
         this.markDownArticleService = articleService;
+        this.counter = counter;
     }
 
     @RequestMapping("/get/{hashcode}")
     public ModelAndView get(@PathVariable("hashcode") Long hashCode) throws ArticleNotFoundException {
         ModelAndView modelAndView = new ModelAndView("article");
-        modelAndView.addObject("content", this.markDownArticleService.search(hashCode));
+        modelAndView.addObject("article", this.markDownArticleService.search(hashCode));
+        modelAndView.addObject("viewers", counter.add(hashCode));
         return modelAndView;
     }
 

@@ -9,8 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
@@ -55,7 +57,7 @@ public class SystemDict implements CommandLineRunner {
         }
         //顺便设置静态导航栏
         List<String> folders = this.metaInfo.getCatalog().catalogs();
-        int lastIndex = 10 > markdownMetas.size() ? markdownMetas.size() : 10;
+        int lastIndex = page.getNewestSize() > markdownMetas.size() ? markdownMetas.size() : page.getNewestSize();
         viewResolver.setStaticVariables(ImmutableMap.of("navMenu", folders,
                 "pageInfo", page,
                 "newest", markdownMetas.subList(0, lastIndex)));
@@ -63,12 +65,12 @@ public class SystemDict implements CommandLineRunner {
 
     public Page<MetaData> listMetas(Pageable pageable) {
         int number = pageable.getPageNumber();
-        int size = pageable.getPageSize();
+        int size = page.getPageSize();
         int first = number * size;
         int maxIndex = markdownMetas.size() - 1;
         first = first >= maxIndex ? maxIndex : first;
         int last = maxIndex < first + size ? maxIndex + 1 : first + size;
-        return new PageImpl<>(markdownMetas.subList(first, last), pageable, markdownMetas.size());
+        return new PageImpl<>(markdownMetas.subList(first, last), PageRequest.of(number, size), markdownMetas.size());
     }
 
     /**
