@@ -16,13 +16,13 @@ website:
      <img src="/cat32.png"><span class="badge badge-primary">Markdown blog，welcome join</a></span>'
     keywords: ''
     titleSuffix: '个人随笔'
-
   gittalk:
-    owner:
-    repo:
-    oauth:
-      clientId:
-      secret:
+    enable: true
+    owner: 234369425
+    admin: 234369425
+    repo: Markdown-Blog
+    clientId: dee3293d9040a47c92c9
+    secret: 9db3a4162ec5fca9a2b95266aadb3548dd018eb8
 server:
   port: 9999
 

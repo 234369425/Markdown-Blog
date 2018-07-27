@@ -22,7 +22,9 @@
     </div>
 
 
-    <div th:utext="${article.html}"></div>
+    <div class="under-line" th:utext="${article.html}"></div>
+
+    <div th:replace="component/footer :: comments(id=${article.meta.hash})"></div>
 </div>
 <footer th:replace="component/footer :: footer">
 

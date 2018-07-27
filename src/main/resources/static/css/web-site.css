@@ -9,11 +9,6 @@
     border: 1px dotted white;
 }
 
-.logo{
-    padding: 10rem 0;
-    box-shadow: 0 0 8px rgba(244, 255, 87, 0.5);
-}
-
 .main-content {
     min-height: 400px;
     height: auto !important;
