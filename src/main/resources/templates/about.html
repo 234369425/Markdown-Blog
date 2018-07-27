@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head th:replace="component/header :: head(~{::title},~{::meta})">
     <title th:text='${ "About " + pageInfo.author}'></title>
-    <meta name="keywords" th:content='${pageInfo.author}''>
+    <meta name="keywords" th:content='${"关于"+pageInfo.author+",About "+pageInfo.author}'>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
 </head>
 <body>
