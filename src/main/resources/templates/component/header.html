@@ -20,8 +20,9 @@
         <nav class="nav navbar-expand-lg navbar-dark" role="navigation">
             <a class="navbar-brand h1 logo" href="/" th:utext="${pageInfo.logo}"></a>
             <ul class="nav navbar-nav site-nav justify-content-end">
-                <li class="nav-item" th:each="m:${navMenu}">
-                    <a class="align-middle nav-link" href="#" th:text="${m}"></a>
+                <li class="nav-item" th:each="catalog:${navMenu.getSubCatalogs()}">
+                    <a class="align-middle nav-link" th:href='${"/catalog/list/"+catalog.getHashcode()}'
+                       th:text="${catalog.getName()}"></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link align-middle" href="/article/md/about.html">About</a>

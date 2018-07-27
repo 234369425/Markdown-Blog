@@ -79,14 +79,10 @@ public class WebSiteConfig {
     @Getter
     @Setter
     public static class GitTalk {
+        private Boolean enable = Boolean.FALSE;
         private String owner;
+        private String admin;
         private String repo;
-        private Oauth oauth;
-    }
-
-    @Getter
-    @Setter
-    public static class Oauth {
         private String clientId;
         private String secret;
     }

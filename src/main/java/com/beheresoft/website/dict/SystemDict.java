@@ -1,15 +1,16 @@
 package com.beheresoft.website.dict;
 
 import com.beheresoft.website.config.WebSiteConfig;
+import com.beheresoft.website.dict.pojo.Catalog;
 import com.beheresoft.website.dict.pojo.MetaData;
 import com.beheresoft.website.dict.pojo.MetaInfo;
 import com.beheresoft.website.exception.ArticleNotFoundException;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +35,7 @@ public class SystemDict implements CommandLineRunner {
     private ThymeleafViewResolver viewResolver;
     private ApplicationContext applicationContext;
     private WebSiteConfig.Page page;
+    private WebSiteConfig.GitTalk gitTalk;
     private Path about;
 
 
@@ -44,6 +46,7 @@ public class SystemDict implements CommandLineRunner {
         this.viewResolver = viewResolver;
         this.applicationContext = applicationContext;
         this.page = webSiteConfig.getPage();
+        this.gitTalk = webSiteConfig.getGitTalk();
     }
 
     @Override
@@ -55,22 +58,42 @@ public class SystemDict implements CommandLineRunner {
         } catch (IOException e) {
             SpringApplication.exit(applicationContext);
         }
+        setViewResolverStaticVariables();
+    }
+
+    private void setViewResolverStaticVariables() {
         //顺便设置静态导航栏
-        List<String> folders = this.metaInfo.getCatalog().catalogs();
         int lastIndex = page.getNewestSize() > markdownMetas.size() ? markdownMetas.size() : page.getNewestSize();
-        viewResolver.setStaticVariables(ImmutableMap.of("navMenu", folders,
+        viewResolver.setStaticVariables(ImmutableMap.of("navMenu", this.metaInfo.getCatalog(),
                 "pageInfo", page,
+                "gitTalk", gitTalk,
                 "newest", markdownMetas.subList(0, lastIndex)));
     }
 
+    public Page<MetaData> listCatalogMetas(Long hashCode, Pageable pageable) {
+        Catalog catalog = search(this.metaInfo.getCatalog(), hashCode);
+        List<MetaData> metaData = catalog.getArticles();
+        return PageIndex.of(pageable, page.getPageSize(), metaData).toPage();
+    }
+
+    private Catalog search(Catalog catalog, Long hashCode) {
+        if (catalog.getHashcode() == hashCode) {
+            return catalog;
+        }
+
+        while (catalog.getSubCatalogs() != null && !catalog.getSubCatalogs().isEmpty()) {
+            for (Catalog c : catalog.getSubCatalogs()) {
+                Catalog cr = search(c, hashCode);
+                if (cr != null) {
+                    return cr;
+                }
+            }
+        }
+        return null;
+    }
+
     public Page<MetaData> listMetas(Pageable pageable) {
-        int number = pageable.getPageNumber();
-        int size = page.getPageSize();
-        int first = number * size;
-        int maxIndex = markdownMetas.size() - 1;
-        first = first >= maxIndex ? maxIndex : first;
-        int last = maxIndex < first + size ? maxIndex + 1 : first + size;
-        return new PageImpl<>(markdownMetas.subList(first, last), PageRequest.of(number, size), markdownMetas.size());
+        return PageIndex.of(pageable, page.getPageSize(), markdownMetas).toPage();
     }
 
     /**
@@ -90,5 +113,45 @@ public class SystemDict implements CommandLineRunner {
 
     public Path getAbout() {
         return about;
+    }
+
+    private static class PageIndex {
+        private int first;
+        private int last;
+        private int number;
+        private int size;
+        private int rowCount;
+        private List<MetaData> dataList;
+
+        private static final int EMPTY_INDEX = -1;
+        private static final Page<MetaData> EMPTY = new PageImpl<>(Lists.newArrayList(), PageRequest.of(0, 10), 0);
+
+        private PageIndex(Pageable pageable, int pageSize, List<MetaData> list) {
+            if (list == null || list.isEmpty()) {
+                first = EMPTY_INDEX;
+                return;
+            }
+            number = pageable.getPageNumber();
+            first = number * pageSize;
+            dataList = list;
+            rowCount = list.size();
+            int maxIndex = rowCount - 1;
+            first = first >= maxIndex ? maxIndex : first;
+            size = pageSize;
+            last = maxIndex < first + pageSize ? maxIndex + 1 : first + pageSize;
+        }
+
+        static PageIndex of(Pageable pageable, int pageSize, List<MetaData> list) {
+            return new PageIndex(pageable, pageSize, list);
+        }
+
+        Page<MetaData> toPage() {
+            if (first == EMPTY_INDEX || dataList == null || dataList.isEmpty()) {
+                return EMPTY;
+            }
+            return new PageImpl<>(dataList.subList(first, last),
+                    PageRequest.of(number, size),
+                    rowCount);
+        }
     }
 }
