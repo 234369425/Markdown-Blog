@@ -18,7 +18,7 @@
 <div th:fragment="nav" class="container-fluid bg-dark " style="margin-bottom:1.5rem;">
     <div class="container">
         <nav class="nav navbar-expand-lg navbar-dark" role="navigation">
-            <a class="navbar-brand h1" href="/" th:utext="${pageInfo.logo}"></a>
+            <a class="navbar-brand h1 logo" href="/" th:utext="${pageInfo.logo}"></a>
             <ul class="nav navbar-nav site-nav justify-content-end">
                 <li class="nav-item" th:each="m:${navMenu}">
                     <a class="align-middle nav-link" href="#" th:text="${m}"></a>

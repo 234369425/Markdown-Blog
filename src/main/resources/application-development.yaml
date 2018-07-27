@@ -1,15 +1,6 @@
 spring:
-  datasource:
-    url: jdbc:mysql://localhost/website?characterEncoding=utf8&useSSL=false
-    username: root
-    password: root
   thymeleaf:
     cache: false
-    check-template-location: true
-    enabled: true
-    encoding: UTF-8
-    mode: HTML
-    suffix: .html
 website:
   markdownDir: E:/demo/articles
   indexDir: d:/website/index
@@ -22,7 +13,7 @@ website:
     logo: '<img class="align-bottom" src="/bug32.png"/><img src="/cat48.png">不能约的Secret'
     footer: '&copy; Aladi 2018 <br/>
      <a href="https://github.com/234369425/Markdown-Blog" target="_blank">
-     <span class="badge badge-primary">Markdown blog，welcome join</a></span>'
+     <img src="/cat32.png"><span class="badge badge-primary">Markdown blog，welcome join</a></span>'
     keywords: ''
     titleSuffix: '个人随笔'
 

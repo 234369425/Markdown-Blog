@@ -1,9 +1,25 @@
+.logo img:hover {
+    animation-name: bounce;
+    animation-duration: 1s;
+}
+
+.footer span:hover, .footer img:hover{
+    animation-name: pulse;
+    animation-duration: 0.9s;
+    border: 1px dotted white;
+}
+
+.logo{
+    padding: 10rem 0;
+    box-shadow: 0 0 8px rgba(244, 255, 87, 0.5);
+}
+
 .main-content {
     min-height: 400px;
     height: auto !important;
 }
 
-.site-nav{
+.site-nav {
     padding-top: 0.5rem;
 }
 
