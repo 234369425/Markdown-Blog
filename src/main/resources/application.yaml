@@ -1,3 +1,11 @@
 spring:
+  mvc:
+    favicon:
+      enabled: false
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
   profiles:
     active: development
