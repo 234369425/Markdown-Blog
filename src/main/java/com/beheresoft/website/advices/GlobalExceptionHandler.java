@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
         return modelAndView;
     }
 
-    @ExceptionHandler({Throwable.class})
+    @ExceptionHandler({Exception.class, Throwable.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView exceptionHandler(HttpServletRequest request, Exception e) {
         ModelAndView modelAndView = new ModelAndView("errors/500");

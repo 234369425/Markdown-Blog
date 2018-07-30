@@ -1,4 +1,4 @@
-package com.beheresoft.website.web.sitemap;
+package com.beheresoft.website.extension.sitemap;
 
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;

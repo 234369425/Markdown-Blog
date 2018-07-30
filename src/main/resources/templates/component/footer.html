@@ -7,19 +7,29 @@
         <div class="gt-container" id="gitTalk-container"></div>
     </div>
     <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-    <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+    <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js" async></script>
     <script type="text/javascript" th:inline="javascript">
-        var giTalkAdmin = [[${giTalk.admin}]];
-        var giTalk = new Gitalk({
-            clientID: [[${giTalk.clientId}]],
-            clientSecret: [[${giTalk.secret}]],
-            repo: [[${giTalk.repo}]],
-            owner: [[${giTalk.owner}]],
-            admin: [ giTalkAdmin ],
-            labels: ['gitment'],
-            id: [[${id}]]
-        });
-        giTalk.render('gitTalk-container');
+        (function () {
+            function initComments() {
+                if (typeof(Gitalk) == 'undefined') {
+                    setTimeout(initComments, 20);
+                    return;
+                }
+                var giTalkAdmin = [[${giTalk.admin}]];
+                var giTalk = new Gitalk({
+                    clientID: [[${giTalk.clientId}]],
+                    clientSecret: [[${giTalk.secret}]],
+                    repo: [[${giTalk.repo}]],
+                    owner: [[${giTalk.owner}]],
+                    admin: [giTalkAdmin],
+                    labels: ['gitment'],
+                    id: [[${id}]]
+                });
+                giTalk.render('gitTalk-container');
+            }
+
+            initComments();
+        })();
     </script>
 </div>
 
