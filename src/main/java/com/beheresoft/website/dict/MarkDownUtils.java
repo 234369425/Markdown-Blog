@@ -232,13 +232,9 @@ public class MarkDownUtils {
     }
 
     private int calcFolderHashCode(List<Path> paths) {
-        int hashCode = 0;
+        int hashCode = 17;
         for (Path p : paths) {
-            if (hashCode == 0) {
-                hashCode = p.hashCode();
-            } else {
-                hashCode = (p.hashCode()) ^ (hashCode >>> 16);
-            }
+           hashCode = (p.hashCode()) ^ (hashCode >>> 16);
         }
         return hashCode;
     }

@@ -35,6 +35,7 @@ public class WebSiteConfig {
     private Page page;
     private int summaryRows = 4;
     private GiTalk giTalk;
+    private String hostName;
 
     public String getIndexDir() {
         if (indexDir == null) {

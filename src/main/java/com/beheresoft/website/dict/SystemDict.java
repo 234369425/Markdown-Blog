@@ -7,6 +7,7 @@ import com.beheresoft.website.dict.pojo.MetaInfo;
 import com.beheresoft.website.exception.ArticleNotFoundException;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
@@ -30,12 +32,13 @@ import java.util.List;
 public class SystemDict implements CommandLineRunner {
 
     private MetaInfo metaInfo;
+    @Getter
     private List<MetaData> markdownMetas;
     private MarkDownUtils markDownUtils;
     private ThymeleafViewResolver viewResolver;
-    private ApplicationContext applicationContext;
-    private WebSiteConfig.Page page;
-    private WebSiteConfig.GiTalk giTalk;
+    private transient ApplicationContext applicationContext;
+    private transient WebSiteConfig.Page page;
+    private transient WebSiteConfig.GiTalk giTalk;
     private Path about;
 
 
@@ -51,6 +54,14 @@ public class SystemDict implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        initDict();
+    }
+
+    /**
+     * 每小时刷新列表载入新文章
+     */
+    @Scheduled(fixedDelay = 60 * 60 * 1000)
+    void initDict() {
         try {
             metaInfo = markDownUtils.loadCatalogInfo();
             markdownMetas = markDownUtils.listMarkDownFiles(metaInfo.getCatalog());
@@ -61,6 +72,9 @@ public class SystemDict implements CommandLineRunner {
         }
     }
 
+    /**
+     * 设置thymeleaf全局变量
+     */
     private void resolverStaticVariables() {
         //顺便设置静态导航栏
         int lastIndex = page.getNewestSize() > markdownMetas.size() ? markdownMetas.size() : page.getNewestSize();
