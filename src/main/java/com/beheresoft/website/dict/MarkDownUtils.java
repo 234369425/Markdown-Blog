@@ -76,6 +76,9 @@ public class MarkDownUtils {
     }
 
     private void addMetaDatas(Catalog catalog, List<MetaData> result) {
+        if (catalog == null) {
+            return;
+        }
         result.addAll(catalog.getArticles());
         for (int i = 0; catalog.getSubCatalogs() != null && i < catalog.getSubCatalogs().size(); i++) {
             addMetaDatas(catalog.getSubCatalogs().get(i), result);

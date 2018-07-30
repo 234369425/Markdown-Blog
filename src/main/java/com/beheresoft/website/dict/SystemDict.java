@@ -55,13 +55,13 @@ public class SystemDict implements CommandLineRunner {
             metaInfo = markDownUtils.loadCatalogInfo();
             markdownMetas = markDownUtils.listMarkDownFiles(metaInfo.getCatalog());
             about = markDownUtils.filterAbout(markdownMetas);
+            resolverStaticVariables();
         } catch (IOException e) {
             SpringApplication.exit(applicationContext);
         }
-        setViewResolverStaticVariables();
     }
 
-    private void setViewResolverStaticVariables() {
+    private void resolverStaticVariables() {
         //顺便设置静态导航栏
         int lastIndex = page.getNewestSize() > markdownMetas.size() ? markdownMetas.size() : page.getNewestSize();
         viewResolver.setStaticVariables(ImmutableMap.of("navMenu", this.metaInfo.getCatalog(),

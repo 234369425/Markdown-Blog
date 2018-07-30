@@ -16,4 +16,11 @@ public class MetaInfo {
     private Boolean locked = Boolean.FALSE;
     private Catalog catalog = null;
 
+    public Catalog getCatalog() {
+        if (catalog == null) {
+            return new Catalog("root", 17);
+        }
+        return catalog;
+    }
+
 }
