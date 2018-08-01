@@ -10,9 +10,10 @@
 }
 
 .main-content {
-    min-height: 400px;
+    min-height: 500px;
     height: auto !important;
 }
+
 
 .site-nav {
     padding-top: 0.5rem;
