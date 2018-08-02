@@ -39,7 +39,7 @@ public class MarkDownArticleService {
             return this.markDownUtils.parse(systemDict.getAbout());
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ArticleNotFoundException(21985);
+            throw new ArticleNotFoundException(-1);
         }
     }
 
