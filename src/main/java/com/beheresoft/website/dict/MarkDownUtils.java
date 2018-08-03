@@ -16,11 +16,13 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -197,8 +199,19 @@ public class MarkDownUtils {
         }
         if (!lines.isEmpty()) {
             int size = lines.size();
-            int summaryTo = webSiteConfig.getSummaryTo() > size ? size : webSiteConfig.getSummaryTo();
-            String summary = Joiner.on("\n").join(lines.subList(webSiteConfig.getSummaryFrom(), summaryTo));
+            int summaryTo = webSiteConfig.getSummaryFrom() + webSiteConfig.getSummaryTo();
+            List<String> rs = new ArrayList<>();
+            int index = 0;
+            for (String s : lines) {
+                if (index >= summaryTo) {
+                    break;
+                }
+                if (!StringUtils.isEmpty(s)) {
+                    index++;
+                    rs.add(s);
+                }
+            }
+            String summary = Joiner.on("\n").join(rs);
             metaData.setSummary(summary);
             metaData.setSummary(parse(metaData.getSummary()));
 
@@ -234,7 +247,7 @@ public class MarkDownUtils {
     private int calcFolderHashCode(List<Path> paths) {
         int hashCode = 17;
         for (Path p : paths) {
-           hashCode = (p.hashCode()) ^ (hashCode >>> 16);
+            hashCode = (p.hashCode()) ^ (hashCode >>> 16);
         }
         return hashCode;
     }
