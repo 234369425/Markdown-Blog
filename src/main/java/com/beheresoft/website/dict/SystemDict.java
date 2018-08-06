@@ -5,6 +5,7 @@ import com.beheresoft.website.dict.pojo.Catalog;
 import com.beheresoft.website.dict.pojo.MetaData;
 import com.beheresoft.website.dict.pojo.MetaInfo;
 import com.beheresoft.website.exception.ArticleNotFoundException;
+import com.beheresoft.website.result.ArticleResult;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import lombok.Getter;
@@ -116,10 +117,19 @@ public class SystemDict implements CommandLineRunner {
      * @param hashcode 文件的hashcode
      * @return 找到的MetaData
      */
-    public MetaData findMetaDataByHashCode(final long hashcode) throws ArticleNotFoundException {
-        for (MetaData metaData : markdownMetas) {
+    public ArticleResult findMetaDataByHashCode(final long hashcode) throws ArticleNotFoundException {
+        ArticleResult articleResult = new ArticleResult();
+        for (int i = 0; i < markdownMetas.size(); i++) {
+            MetaData metaData = markdownMetas.get(i);
             if (metaData.getHash() == hashcode) {
-                return metaData;
+                if (i > 0) {
+                    articleResult.setPrev(markdownMetas.get(i - 1));
+                }
+                articleResult.setMeta(metaData);
+                if (i < markdownMetas.size() - 1) {
+                    articleResult.setNext(markdownMetas.get(i + 1));
+                }
+                return articleResult;
             }
         }
         throw new ArticleNotFoundException(hashcode);

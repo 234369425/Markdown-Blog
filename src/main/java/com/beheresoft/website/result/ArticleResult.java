@@ -2,21 +2,23 @@ package com.beheresoft.website.result;
 
 import com.beheresoft.website.dict.pojo.MetaData;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author Aladi
  */
+@NoArgsConstructor
+@Getter
+@Setter
 public class ArticleResult {
 
-    @Getter
-    public MetaData meta;
+    private MetaData meta;
 
-    @Getter
+    private MetaData prev;
+
+    private MetaData next;
+
     private String html;
-
-    public ArticleResult(MetaData metaData, String html) {
-        this.meta = metaData;
-        this.html = html;
-    }
 
 }

@@ -4,7 +4,6 @@ import com.beheresoft.website.config.WebSiteConfig;
 import com.beheresoft.website.dict.pojo.Catalog;
 import com.beheresoft.website.dict.pojo.MetaData;
 import com.beheresoft.website.dict.pojo.MetaInfo;
-import com.beheresoft.website.exception.ArticleNotFoundException;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
