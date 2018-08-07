@@ -15,14 +15,28 @@
 
     <div class="alert alert-primary" style="margin:1rem 0;" role="alert">
         <div class="list-inline">
-            Date : <span  class="badge badge-pill badge-dark" th:text="${#dates.format(article.meta.lastModify , 'yyyy-MM-dd')}"></span>
-            Author : <span  class="badge badge-pill badge-dark" th:text="${pageInfo.author}"></span>
+            Date : <span class="badge badge-pill badge-dark"
+                         th:text="${#dates.format(article.meta.lastModify , 'yyyy-MM-dd')}"></span>
+            Author : <span class="badge badge-pill badge-dark" th:text="${pageInfo.author}"></span>
             <span class="float-right">Viewers: <span class="badge badge-pill badge-success" th:text="${viewers}"></span></span>
         </div>
     </div>
 
 
     <div class="under-line" th:utext="${article.html}"></div>
+
+    <div class="row" style="margin-top:15px">
+        <div class="col-sm-6 col-xs-12 text-left">
+            <div th:if="${article.prev != null}">
+                上一篇：<a th:href="${'/article/md/get/'+article.prev.hash}">[[${article.prev.title}]]</a>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12 text-right">
+            <div th:if="${article.next != null}">
+                下一篇：<a th:href="${'/article/md/get/'+article.next.hash}">[[${article.next.title}]]</a>
+            </div>
+        </div>
+    </div>
 
     <div th:replace="component/footer :: comments(id=${article.meta.hash})"></div>
 </div>
